@@ -1,0 +1,390 @@
+[
+  {
+    "id": 1,
+    "class": "loader",
+    "description": "New...",
+    "help": "Create new Empty Image",
+    "properties": [
+      {"label": "Raster","output": "raster"},
+      {"label": "Type","select": ["8-bit","16-bit","32-bit","RGB"],"var": "type"},
+      {"label": "Fill with","text": "rgb(0,0,0)","var": "fill"},
+      {"label": "Width","numerical": 256,"var": "width"},
+      {"label": "Height","numerical": 256,"var": "height"},
+      {"label": "NSlices","numerical": 1,"var": "nslices"}
+    ]
+  },
+  {
+    "id": 2,
+    "class": "loader",
+    "description": "Image...",
+    "properties": [
+      {"label": "Raster","output": "raster"},
+      {"label": "Image","select": ["TIFF","PNG","JPG","GIF"],"var": "format"},
+      {"label": "Open","file": "*"}
+    ]
+  },
+  {
+    "id": 3,
+    "class": "loader",
+    "description": "Samples",
+    "help": "Load ImageJ Image/Stack Samples",
+    "preview": true,
+    "properties": [
+      {"label": "Raster","output": "raster"},
+      {
+        "label": "<span style=\"font-size: 2em;vertical-align:middle\"><i class=\"far fa-image\"></i></span>",
+        "select": [
+          "AuPbSn 40 (56K)",
+          "Blobs (25K)[B]",
+          "Boats (356K)",
+          "Bridge (174K)",
+          "Cell Colony (31K)",
+          "Clown (14K)",
+          "Dot Blot (7K)",
+          "Embryos (42K)",
+          "Gel (105K)",
+          "Leaf (36K)",
+          "Lena (68K)",
+          "Line Graph (21K)",
+          "Nile Bend (1.9M)",
+          "Particles (75K)",
+          "TEM Filter (112K)",
+          "Tree Rings (48K)"
+        ],
+        "source"  : [
+          "ij.plugin.URLOpener('AuPbSn40.jpg')"
+        ],
+        "zip": [
+          "Bat Cochlea Volume (19K)",
+          "Bat Cochlea Renderings (449K)"
+        ],
+        "var": "sample"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "class": "loader",
+    "description": "Video Loader",
+    "help": "Load movie file as a stack of images",
+    "properties": [
+      {"label": "Raster","output": "raster"},
+      {"label": "Open","file": "video/mp4"}
+    ]
+  },
+  {
+    "id": 9,
+    "class": "loader",
+    "description": "Text Loader",
+    "properties": [
+      {"label": "Raster","output": "text"},
+      {"label": "Format","select": ["None","CSV","TSV","Text Image"]},
+      {"label": "Open","file": "text/csv,text/tsv"}
+    ]
+  },
+  {
+    "id": 11,
+    "class": "viewer",
+    "description": "2D Viewer",
+    "properties": [
+      {"label": "Backdrop","checkbox": false,"var": "backdrop"},
+      {"label": "Raster","input": "raster"}
+    ]
+  },
+  {
+    "id": 12,
+    "class": "viewer",
+    "description": "Stack Viewer",
+    "properties": [
+      {"label": "Raster","input": "raster"}
+    ]
+  },
+  {
+    "id": 13,
+    "class": "viewer",
+    "description": "Montage",
+    "properties": [
+      {"label": "Rows", "numerical": "auto"},
+      {"label": "Cols", "numerical": "auto"},
+      {"label": "Scale", "numerical": "auto"},
+      {"label": "Border", "numerical": "auto"},
+      {"label": "Labels", "checkbox": false},
+      {"label": "Raster","input": "raster"}
+    ]
+  },
+  {
+    "id": 14,
+    "class": "viewer",
+    "description": "3D Viewer",
+    "help": ["IsoSurface representation using the Marching Cubes Algorithm"],
+    "inputs": ["raster"],
+    "outputs": ["none"],
+    "properties": [
+      {"label": "Vector", "output": "vector"},
+      {"label": "threshold","numerical": "auto"},
+      {"label": "resolution", "numerical": 2},
+      {"label": "Raster","input": "raster"}
+    ]
+  },
+  {
+    "id": 15,
+    "class": "viewer",
+    "description": "Histogram",
+    "help": ["Histogram"],
+    "preview": true,
+    "properties": [
+      {"label": "Bins","numerical": "auto"},
+      {"label": "Min","numerical":  "auto"},
+      {"label": "Max","numerical":  "auto"},
+      {"label": "Backdrop", "checkbox": false},
+      {"label": "Raster", "input": "raster"}
+    ]
+  },
+  {
+    "id": 16,
+    "class": "viewer",
+    "description": "Data Plot",
+    "help": ["Curve"],
+    "properties": [
+      {"label": "X-axis","numerical": "auto"},
+      {"label": "Y-axis","numerical": "auto"},
+      {"label": "max","numerical": "auto"},
+      {"label": "Data", "input": "metadata"}
+    ]
+  },
+  {
+    "id": 20,
+    "class": "saver",
+    "description": "TIFF Saver",
+    "inputs": ["raster"],
+    "outputs": ["file"],
+    "properties": [
+      {"label": "Format",
+        "select": [
+          "Tiff...","Gif...","Jpeg...","Text Image...",
+          "ZIP...","Raw Data...","Image Sequence... ","Video... ",
+          "BMP...","PNG...","PGM...","FITS...",
+          "__disabled__ ──────────","LUT...","Selection...","XY Coordinates...","Results...","Text..."]
+      },
+      {"label": "Write","file": "image/tiff,image/tif"},
+      {"label": "Raster","input": "raster"}
+    ]
+  },
+  {
+    "id": 25,
+    "class": "converter",
+    "description": "Type",
+    "properties": [
+      {"label": "Raster", "output": "raster"},
+      {"label": "To","select": ["Binary","8-bit","16-bit","32-bit","8-bit Color","RGB Color","RGB Stack","HSB Stack","Lab Stack"]},
+      {"label": "Raster", "input": "raster"}
+    ]
+  },
+  {
+    "id": 26,
+    "class": "converter",
+    "description": "Split Colors",
+    "properties": [
+      {"layer": "None", "type": "output","properties": []},
+      {"layer": "RGBA", "type": "output","properties": [
+        {"label": "Red", "output": "raster","var": "red"},
+        {"label": "Green", "output": "raster","var": "green"},
+        {"label": "Blue", "output": "raster","var": "blue"},
+        {"label": "Alpha", "output": "raster","var": "alpha"}
+      ]},
+      {"layer": "HSVA", "type": "output", "properties": [
+        {"label": "Hue", "output": "raster","var": "hue"},
+        {"label": "Saturation", "output": "raster","var": "saturation"},
+        {"label": "Value", "output": "raster","var": "value"},
+        {"label": "Alpha", "output": "raster","var": "alpha"}
+      ]},
+      {"layer": "Luminance", "type": "output", "properties": [
+        {"label": "Luminance", "output": "raster","var": "luminance"}
+      ]},
+      {"layer": "Alpha", "type": "output", "properties": [
+        {"label": "Alpha", "output": "raster","var": "alpha"}
+      ]},
+      {"label": "ColorSpace","layerselect": true,"select": ["None","RGBA","HSVA","Luminance","Alpha"],"var": "colorspace"},
+      {"label": "Raster", "input": "raster"}
+    ]
+  },
+  {
+    "id": 27,
+    "class": "converter",
+    "description": "Threshold",
+    "properties": [
+      {"label": "Raster", "output": "raster"},
+      {
+        "label": "Mode",
+        "select": [
+          "None","Default","Huang",
+          "Intermodes","IsoData","IJ_IsoData",
+          "Li",
+          "MaxEntropy","Mean","MinError","Minimum", "Moments",
+          "Otsu",
+          "Percentile",
+          "RenyiEntropy",
+          "Shanbhag",
+          "Triangle",
+          "Yen"
+        ],
+        "var": "mode"
+      },
+      {"label": "Raster", "input": "raster"}
+    ]
+  },
+  {
+    "id": 31,
+    "class": "math",
+    "description": "Math",
+    "properties": [
+      {"label": "Raster", "output": "raster"},
+      {"label":"Op.","select": ["None","Add","Subtract","Multiply","Divide"],"var": "op"},
+      {"label":"Value","numerical": 0,"input": "number","var": "value"},
+      {"label": "Raster", "input": "raster"}
+    ]
+  },
+  {
+    "id": 32,
+    "class": "math",
+    "description": "Math Macro",
+    "inputs": ["raster"],
+    "outputs": ["raster"],
+    "properties": [
+      {"label": "Raster", "output": "raster"},
+      {"label":"v = ","text": "v","var": "macro"},
+      {"label": "Raster", "input": "raster"}
+    ]
+  },
+  {
+    "id": 33,
+    "class": "math",
+    "description": "Image Calc",
+    "properties": [
+      {"label": "Raster", "output": "raster"},
+      {
+        "label": "Op.",
+        "select": ["None","Add","Subtract","Multiply","Divide","AND","OR","XOR","Min","Max","Average","Difference"],
+        "var": "op"
+      },
+      {"label": "Raster #1", "input": "raster"},
+      {"label": "Raster #2", "input": "raster"}
+    ]
+  },
+  {
+    "id": 33,
+    "class": "math",
+    "description": "Transform",
+    "preview": true,
+    "properties": [
+      {"label": "Raster", "output": "raster"},
+      {"label": "Op.","layerselect": true, "select": ["None","Rot. 90","Flip","Rotate","Translate","Scale", "Matrix"],"var": "op"},
+      {"layer": "None", "type": "content","properties": []},
+      {"layer": "Rot. 90", "type": "content", "properties": [
+        {"label": "ClockWise", "checkbox": true,"var": "cw"}
+      ]},
+      {"layer": "Flip", "type": "content", "properties": [
+        {"label": ["Flip Vertically"],"checkbox": false,"var": "flipv"},
+        {"label": ["Flip Horizontally"],"checkbox": false,"var": "fliph"}
+      ]},
+      {"layer": "Rotate", "type": "content", "properties": [
+        {"label": "Angle (°)", "numerical": 0,"var": "angle"},
+        {"label": "Interpolation", "select": ["None","Bilinear","Bicubic"],"var": "interpolation"}
+      ]},
+      {"layer": "Translate", "type": "content", "properties": [
+        {"label": "TX", "numerical": 0,"var": "tx"},
+        {"label": "TY", "numerical": 0,"var": "ty"},
+        {"label": "Interpolation", "select": ["None","Bilinear","Bicubic"],"var": "interpolation"}
+      ]},
+      {"layer": "Scale", "type": "content", "properties": [
+        {"label": ["Scale X"],"numerical": 1,"var":"scalex"},
+        {"label": ["Scale Y"],"numerical": 1,"var":"scaley"},
+        {"label": ["Scale Z"],"numerical": 1,"var":"scalez"},
+        {"label": "Interpolation", "select": ["None","Bilinear","Bicubic"],"var": "interpolation"}
+      ]},
+      {"layer": "Matrix", "type": "content", "properties": [
+        {"label": "", "numerical": 1,"var": "m00"}, {"label": "", "numerical": 0,"var": "m00"},{"label": "", "numerical": 0,"var": "m00"}, {"label": "", "numerical": 0,"var": "m00"},
+        {"label": "", "numerical": 0,"var": "m00"}, {"label": "", "numerical": 1,"var": "m00"},{"label": "", "numerical": 0,"var": "m00"}, {"label": "", "numerical": 0,"var": "m00"},
+        {"label": "", "numerical": 0,"var": "m00"}, {"label": "", "numerical": 0,"var": "m00"},{"label": "", "numerical": 1,"var": "m00"}, {"label": "", "numerical": 0,"var": "m00"},
+        {"label": "", "numerical": 0,"var": "m00"}, {"label": "", "numerical": 0,"var": "m00"},{"label": "", "numerical": 0,"var": "m00"}, {"label": "", "numerical": 1,"var": "m00"}
+      ]},
+      {"label": "Raster", "input": "raster"}
+    ]
+  },
+  {
+    "id": 41,
+    "class": "morphology",
+    "description": "MM Basic",
+    "properties": [
+      {"label": "Raster", "output": "raster"},
+      {"label":"Op.",  "select": ["Erode","Dilate","Open","Close"]},
+      {"label": "Raster", "input": "raster"}
+    ]
+  },
+  {
+    "id": 42,
+    "class": "morphology",
+    "description": "MM Advanced",
+    "help": "Advanced Operators of Mathematical Morphology",
+    "properties": [
+      {"label": "Raster", "output": "raster"},
+      {"label":"Op.",  "select": ["None","Skeletonize...","Watershed","UEP","Close"]},
+      {"label": "Raster", "input": "raster"}
+    ]
+  },
+  {
+    "id": 50,
+    "class": "information",
+    "description": "Information",
+    "help": "Basic Statistics",
+    "properties": [
+      {"label": "Width", "output": "value","readonly": -1,"var":"width"},
+      {"label": "Height", "output": "value","readonly": -1,"var":"height"},
+      {"label": "NSlices", "output": "value","readonly": -1,"var":"nslices"},
+      {"label": "Bits/Pix", "output": "value","readonly": -1,"var":"bpp"},
+      {"label": "Unit", "output": "value","readonly": "px","var":"unit"},
+      {"label": "Pix.Size", "output": "value","readonly": 1,"var":"pixsize"},
+      {"label": "Raster", "input": "raster"}
+    ]
+  },
+  {
+    "id": 51,
+    "class": "information",
+    "description": "Statistics",
+    "help": "Basic Statistics",
+    "properties": [
+      {"label": "Min", "output": "value"},
+      {"label": "Max", "output": "value"},
+      {"label": "Mean", "output": "value"},
+      {"label": "Std.Dev.", "output": "value"},
+      {"label": "All Slices", "checkbox": false},
+      {"label": "Raster", "input": "raster"}
+    ]
+  },
+  {
+    "id": 100,
+    "class": "filter",
+    "description": "Filter 2D",
+    "preview": true,
+    "properties": [
+      {"label": "Raster 2D+", "output": "raster"},
+      {"label": "Op.", "select": ["Gaussian Blur","Median","Mean","Minimum","Maximum","Unsharp Mask","Variance"]},
+      {"label": "Radius", "numerical": 2},
+      {"label": "All Slices", "checkbox": false},
+      {"label": "Raster 2D+", "input": "raster"}
+    ]
+  },
+  {
+    "id": 101,
+    "class": "filter",
+    "description": "Edge Detection",
+    "preview": true,
+    "properties": [
+      {"label": "Raster 2D+", "output": "raster"},
+      {"label": "Op.", "select": ["Sobel","Laplace"]},
+      {"label": "Radius", "numerical": 2},
+      {"label": "All Slices", "checkbox": false},
+      {"label": "Raster 2D+", "input": "raster"}
+    ]
+  }
+]
