@@ -36,18 +36,39 @@ class Edge {
   }
 
   createEdge(idE,idS,idT,input,output) {
+    // Source
     let nodeS = document.querySelector(`#node_${idS} #o_${output} button`);
+    let shrinkNodeS = document.querySelector(`#node_${idS} .output_connector`);
+    let tmp = [idE];
     if (nodeS.dataset.edge !== undefined) {
       console.log(nodeS.dataset.edge);
-      let tmp = JSON.parse(nodeS.dataset.edge);
-      tmp.push( `e_${idE}`);
-      nodeS.dataset.edge = JSON.stringify(tmp);
+      tmp = JSON.parse(nodeS.dataset.edge);
+      tmp.push( idE);
+    }
+    nodeS.dataset.edge = JSON.stringify(tmp);
+    if (shrinkNodeS.dataset.edge !== undefined) {
+      let array = JSON.parse(shrinkNodeS.dataset.edge);
+      array = [...array,...tmp];
+      console.log(array);
+      shrinkNodeS.dataset.edge = JSON.stringify(array);
     }
     else {
-      nodeS.dataset.edge = `["e_${idE}"]`;
+      shrinkNodeS.dataset.edge = nodeS.dataset.edge;
     }
+    
+    // Target
     let nodeT = document.querySelector(`#node_${idT} #i_${input} button`);
-    nodeT.dataset.edge = `e_${idE}`;
+    let shrinkNodeT = document.querySelector(`#node_${idT} .input_connector`);
+    nodeT.dataset.edge = idE;
+    if (shrinkNodeT.dataset.edge !== undefined) {
+      let array = JSON.parse(shrinkNodeT.dataset.edge);
+      array.push(idE);
+      shrinkNodeT.dataset.edge = JSON.stringify(array);
+      console.log('shrinkT ' + shrinkNodeT.dataset.edge + ' ' +  idE);
+    }
+    else {
+      shrinkNodeT.dataset.edge = `[${idE}]`;
+    }
 
     console.log(nodeS.id + '--> ' + nodeT.id);
     let start = this.getCoords(nodeS);

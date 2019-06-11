@@ -75,7 +75,11 @@ class Node {
 
   }
 
-  // Header
+  /*
+   * Create Header
+   *
+   * @author Jean-Christophe Taveau
+   */
   createHeader(node,id,metadata) {
     let nodeH = this.element;
 
@@ -94,7 +98,11 @@ class Node {
     return head;
   }
 
-  // Shrinkable View of node
+  /*
+   * Create Shrinkable View of node
+   *
+   * @author Jean-Christophe Taveau
+   */
   createShrinkArea(node,id,metadata) {
 
     let shrink = document.createElement('div');
@@ -139,6 +147,11 @@ class Node {
   createInputs() {
   }
 
+  /*
+   * Create Body
+   *
+   * @author Jean-Christophe Taveau
+   */
   createBody(node,id,metadata) {
 
     // Body
@@ -151,7 +164,6 @@ class Node {
     let action = document.createElement('div'); action.className = 'action';
     let popup = document.createElement('div'); popup.className = 'popup';
 
-    
     // Parameters
     let outputLayers = [];
     let contentLayers = [];
@@ -211,6 +223,11 @@ class Node {
   }
 
 
+  /*
+   * Create the footer
+   *
+   * @author Jean-Christophe Taveau
+   */
   createFooter(node,id,metadata) {
     let foot = document.createElement('div');
     foot.className = 'footer';
@@ -218,7 +235,65 @@ class Node {
     return foot;
   }
 
+  /*
+   * Create one Row
+   *
+   * @author Jean-Christophe Taveau
+   */
   createRow(props) {
+      return props.reduce( (accu,prop,index) => {
+        let label = prop.label;
+
+        if (label === '_nodisplay_') {
+          return accu;
+        }
+        accu += (prop.output) ? `<div id="o_${index}" class="output">` : ((prop.input) ? `<div id="i_${index}" class="input">`:`<div class="row">`);
+        if (prop.input !== undefined || prop.output !== undefined) {
+          accu += `<button><i class="fas fa-chevron-circle-right"></i></button>`;
+        }
+
+        if (prop.label !== undefined && prop.output === undefined) {
+          accu += `<label>${prop.label}</label>`;
+        }
+        console.log(Object.keys(prop));
+
+        Object.keys(prop).forEach( key => {
+          switch (key) {
+          case 'canvas': 
+            accu += `<div class="graphics"><canvas></canvas></div>`; 
+            break;
+          case 'checkbox': 
+            accu += `<input class="checkbox" type="checkbox" value="${prop.checkbox}" ${prop.checkbox ? 'checked': ''}></input>`;
+            break;
+          case 'file': 
+            accu += `<i class=\"far fa-folder-open\"></i></label><input id="file" class="file-input" type="file"></input>`;
+            break;
+          case 'numerical': 
+            accu += `<input type="number" class="numerical" name="${prop.var || 'unknown'}" minlength="4" maxlength="8" size="10" value="${prop.numerical}"></input>`;
+            break;
+          case 'readonly': 
+            accu += `<input type="text" readonly minlength="4" maxlength="8" size="10" value="${prop.readonly}"></input>`;
+            break;
+          case 'select': 
+            let options = prop.select.reduce( (html,item,index) => html + `<option value="${index}">${item}</option>`,'');
+            accu += `<select>${options}</select>`;
+            break;
+          case 'text': 
+            accu += `<input type="text" class="text" minlength="4" maxlength="8" size="10" value="${prop.text}"></input>`;
+            break;
+          }
+        });
+
+        if (prop.label !== undefined && prop.output !== undefined) {
+          accu += `<label>${prop.label}</label>`;
+        }
+        accu += '</div>';
+
+        return accu;
+      },
+        ''
+      );
+/*
     return props.reduce( (accu,prop,index) => {
       let label = prop.label;
 
@@ -253,6 +328,7 @@ class Node {
     },
       ''
     );
+*/
   }
 
 } // End of class Node

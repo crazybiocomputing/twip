@@ -26,6 +26,10 @@
 
 class Graph {
 
+  /**
+   * @constructor
+   * @author Jean-Christophe Taveau
+   */
   constructor() {
     this.templates;
     this.nodes = [];
@@ -90,28 +94,46 @@ class Graph {
 
 
   updateEdges(nodes,shrinkMode = false) {
+    console.log('UPDATE ' + shrinkMode);
     nodes.forEach( node => {
       // Get Edge ID
       // let src_eid = document.querySelector(`#${node.id} .input button`);
-      let source = (shrinkMode) ? document.querySelector(`#${node.id} .output_connector`) : document.querySelector(`#${node.id} .output button`);
-      if (source !== null && source.dataset.edge !== undefined) {
-        console.log(source);
-        console.log(source.dataset.edge);
-        JSON.parse(source.dataset.edge).forEach( (e) => {
-          let line = document.getElementById(e);
-          let start = this.getCoords(source);
-          line.setAttribute('x1',start.x);
-          line.setAttribute('y1',start.y);
+      let sources = (shrinkMode) ? document.querySelectorAll(`#${node.id} .output_connector`) : document.querySelectorAll(`#${node.id} .output button`);
+      if (sources !== null) {
+        sources.forEach( s => {
+          if (s.dataset.edge !== undefined) {
+            JSON.parse(s.dataset.edge).forEach( (e) => {
+              let line = document.getElementById( `e_${e}`);
+              let start = this.getCoords(s);
+              line.setAttribute('x1',start.x);
+              line.setAttribute('y1',start.y);
+            });
+          }
         });
       }
-      let target = (shrinkMode) ? document.querySelector(`#${node.id} .input_connector`) : document.querySelectorAll(`#${node.id} .input button`);
-      if (target !== null) {
-        target.forEach( t => {
-          let line = document.getElementById(t.dataset.edge);
-          let end = this.getCoords(t);
-          line.setAttribute('x2',end.x);
-          line.setAttribute('y2',end.y);
-        });
+      let targets = (shrinkMode) ? document.querySelectorAll(`#${node.id} .input_connector`) : document.querySelectorAll(`#${node.id} .input button`);
+      if (targets !== null) {
+        if (shrinkMode) {
+          targets.forEach( t => {
+            if (t.dataset.edge !== undefined) {
+              JSON.parse(t.dataset.edge).forEach( (e) => {
+                let line = document.getElementById(`e_${e}`);
+                let end = this.getCoords(t);
+                line.setAttribute('x2',end.x);
+                line.setAttribute('y2',end.y);
+              });
+            }
+          });
+        }
+        else {
+          targets.forEach( t => {
+            let line = document.getElementById(`e_${t.dataset.edge}`);
+            let end = this.getCoords(t);
+            line.setAttribute('x2',end.x);
+            line.setAttribute('y2',end.y);
+          });
+        }
+
       }
     });
   }

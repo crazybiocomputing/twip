@@ -2,16 +2,19 @@
    * Events
    */
   const shrinkExpand = (evt) => {
-    console.log(evt);
-    console.log(evt.target.value,evt.target.parentNode.id);
+    console.log('SHRINK/EXPAND');
+
     // Hide body, footer
     let id = evt.target.parentNode.id.match(/\d+/)[0];
     let node = document.getElementById(`node_${id}`);
+    console.log(evt.target.parentNode.id,id);
+    console.log(node);
     node.classList.toggle('shrink');
 
     // Shrink mode is true
-    updateEdges([id],true);
+    TWIP.graph.updateEdges([node],node.classList.contains('shrink'));
     console.log(node);
+    evt.preventDefault();
 
   }
 
@@ -42,7 +45,7 @@
         moveAt(event.pageX, event.pageY);
         // Update Edges
         // TODO HACK 
-        TWIP.graph.updateEdges([dragged]);
+        TWIP.graph.updateEdges([dragged],isShrinked);
 
         event.preventDefault();
         return false;
@@ -54,12 +57,13 @@
         window.removeEventListener('mousemove', drag_over,false);
         dragged.removeEventListener('mouseup', drag_end,false);
         // Update Edges
-        TWIP.graph.updateEdges([node]);
+        TWIP.graph.updateEdges([node],isShrinked);
       }
       
       // Main of `dragstart`
       console.log(event);
       let dragged = document.getElementById(`node_${event.target.dataset.nodeid}`);
+      let isShrinked = dragged.classList.contains('shrink');
       console.log(event.target.dataset.nodeid,dragged);
       let orgX = event.pageX;
       let orgY = event.pageY;
