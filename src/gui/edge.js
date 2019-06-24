@@ -38,7 +38,7 @@ class Edge {
   createEdge(idE,idS,idT,input,output) {
     // Source
     let nodeS = document.querySelector(`#node_${idS} #o_${output} button`);
-    let shrinkNodeS = document.querySelector(`#node_${idS} .output_connector`);
+    let shrinkNodeS = document.querySelector(`#node_${idS} .out_socket`);
     let tmp = [idE];
     if (nodeS.dataset.edge !== undefined) {
       console.log(nodeS.dataset.edge);
@@ -58,7 +58,7 @@ class Edge {
     
     // Target
     let nodeT = document.querySelector(`#node_${idT} #i_${input} button`);
-    let shrinkNodeT = document.querySelector(`#node_${idT} .input_connector`);
+    let shrinkNodeT = document.querySelector(`#node_${idT} .in_socket`);
     nodeT.dataset.edge = idE;
     if (shrinkNodeT.dataset.edge !== undefined) {
       let array = JSON.parse(shrinkNodeT.dataset.edge);

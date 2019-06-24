@@ -1,10 +1,27 @@
 
-main {
+body,main,#board {
+  margin:0;
+  padding:0;
+}
+body {
+  background-image: url('./background2.png');
   font-family: 'Lato', sans-serif;
   font-size: 12px;
-  width: 2400px;
-  height: 800px;
-  background-image: url('./background2.png');
+  height: 100vh;
+}
+main {
+  width: 100vw;
+  height: 100vh;
+  transform-origin: center;
+}
+
+#board {
+  width: 100vw;
+  height: 100vh;
+  transform-origin: 0 0 0;
+  position: absolute;
+  top:0;
+  left: 0;
 }
 
 section {
@@ -34,7 +51,7 @@ svg {
   display: none;
 }
 
-.shrinkdiv .input_connector  {
+.shrinkdiv .in_socket  {
   display: block;
   outline: none;
   cursor: pointer;
@@ -49,7 +66,7 @@ svg {
   left: -6px;
 }
 
-.shrinkdiv .output_connector  {
+.shrinkdiv .out_socket  {
   display: block;
   outline: none;
   cursor: pointer;
@@ -159,12 +176,13 @@ svg {
   background-color: #33a02c;
 }
 
-.machine_locktext {
-  background-color: #ff7f00;
-}
 
 .filter {
   background-color: #1f78b4;
+}
+
+.programming {
+  background-color: #426628;
 }
 
 .switch {
@@ -177,6 +195,7 @@ svg {
 
 .footer {
   background-color: rgb(20,20,20);
+  border-radius: 0 0 4px 4px;
   color: white;
 }
 
@@ -217,55 +236,7 @@ svg {
   left: 120px;
 }
 
-.inputs {
-  bottom: 0;
-}
 
-.input button  {
-  display: block;
-  float: left;
-  outline: none;
-  cursor: pointer;
-  font-size: 1em;
-  padding: 0px;
-  transition: 0.3s;
-  position: absolute;
-  border: solid 1px black;
-  border-radius: 1em;
-  padding: 0px 1px;
-  left: -6px;
-}
-
-.input label {
-  padding: 0px 10px;
-}
-
-.outputs {
-  top: 0;
-}
-
-.output {
-  text-align: right;
-}
-
-.output button  {
-  display: block;
-  float: right;
-  outline: none;
-  cursor: pointer;
-  font-size: 1em;
-  padding: 0px;
-  transition: 0.3s;
-  position: absolute;
-  border: solid 1px black;
-  border-radius: 1em;
-  padding: 0px 1px;
-  right: -6px;
-}
-
-.output label {
-  padding: 0px 10px;
-}
 
 /* Change background color of buttons on hover */
 .tab button:hover {
@@ -305,17 +276,66 @@ select, input, button {
 }
 
 .body .input {
-  display: flex;
+  display: table-cell;
   /*padding: 0px 2px;*/
 }
 
-
 .body label {
   display: table-cell;
+  width: 40%;
+  padding-right: 4px;
   text-align: right;
 }
 
-input,select {
+.select-container {
+  position: relative; 
+  width: 100%;
+  border-radius: 10px;
+  background-color: #fff;
+  margin: 0 0 1.5em 0;
+  
+  overflow: hidden; 
+}
+
+.select-container select {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+
+  width: 110%; 
+  /* 
+    On est sûr de ne plus voir
+    la flèche native 
+  */
+  
+  height: auto;
+  border: 0; 
+  margin: 0;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: 'Lato', sans-serif;
+  font-size:12px;
+  background-color: #fefefe;
+
+}
+
+.select-container::after { 
+  content: '';
+  position: absolute;
+  top: 50%; 
+  margin-top: -3px;
+  right: 4px;  
+  display: block; 
+  width: 0; height: 0;
+  border-color: transparent;
+  border-top-color: #444; 
+  border-width: 6px;
+  border-style: solid;
+  pointer-events: none;
+}
+
+input, .select-container {
   display: table-cell;
   font-family: 'Lato', sans-serif;
   font-size:12px;
@@ -332,11 +352,101 @@ input:readonly {
   cursor: not-allowed;
 }
 
-input[type="text"],select {
+input[type="text"] {
   width: 90%;
   border: solid 1px #ccc;
   border-radius: 10px;
   padding-left: 4px;
+}
+
+/* Hide HTML5 Up and Down arrows. */
+input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+ 
+input[type="number"] {
+  -moz-appearance: textfield;
+  width: 90%;
+  border: solid 1px #ccc;
+  border-radius: 10px;
+  padding-left: 4px;
+}
+
+
+.inputs {
+  display: flex;
+  flex-flow: column wrap;
+  bottom: 0;
+}
+
+.inputs .input {
+  margin: 2px 0px;
+}
+
+.input button  {
+  display: block;
+  float: left;
+  outline: none;
+  cursor: pointer;
+  font-size: 1em;
+  transition: 0.3s;
+  position: absolute;
+  border: solid 1px black;
+  border-radius: 50%;
+  padding: 0px 1px;
+  left: -6px;
+}
+
+.input button::after { 
+    content: '';
+    display: block;
+    position: absolute;
+    top: -8px;
+    bottom: 0;
+    left: -8px;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 8px solid #fff9;
+}
+
+.input label {
+  text-align: left;
+  padding: 0px 10px;
+}
+
+.outputs {
+  display: flex;
+  flex-flow: column wrap;
+  top: 0;
+}
+
+.output {
+  text-align: right;
+  display: block;
+}
+
+.output button  {
+  display: block;
+  float: right;
+  outline: none;
+  cursor: pointer;
+  font-size: 1em;
+  padding: 0px;
+  transition: 0.3s;
+  position: absolute;
+  border: solid 1px black;
+  border-radius: 1em;
+  padding: 0px 1px;
+  right: -6px;
+}
+
+.output label {
+  padding: 0px 10px;
+  display: block;
+  width: 100%;
 }
 
 
@@ -351,8 +461,15 @@ input[type="text"],select {
   display: none;
 }
 
+.content .graphics {
 
+}
 
+.content canvas {
+  background-image: url(background.png);
+  max-width: 100%;
+  margin: 0 auto;
+}
 
 .footer .resize {
   float: right;

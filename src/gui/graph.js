@@ -92,50 +92,54 @@ class Graph {
   show() {
   }
 
+  updateAllEdges(nodes) {
+    console.log(nodes);
+    nodes.forEach( n => {
+      this.updateEdges(n, n.classList.contains('shrink') );
+    });
+  }
 
-  updateEdges(nodes,shrinkMode = false) {
+  updateEdges(node,shrinkMode = false) {
     console.log('UPDATE ' + shrinkMode);
-    nodes.forEach( node => {
-      // Get Edge ID
-      // let src_eid = document.querySelector(`#${node.id} .input button`);
-      let sources = (shrinkMode) ? document.querySelectorAll(`#${node.id} .output_connector`) : document.querySelectorAll(`#${node.id} .output button`);
-      if (sources !== null) {
-        sources.forEach( s => {
-          if (s.dataset.edge !== undefined) {
-            JSON.parse(s.dataset.edge).forEach( (e) => {
-              let line = document.getElementById( `e_${e}`);
-              let start = this.getCoords(s);
-              line.setAttribute('x1',start.x);
-              line.setAttribute('y1',start.y);
+    // Get Edge ID
+    // let src_eid = document.querySelector(`#${node.id} .input button`);
+    let sources = (shrinkMode) ? document.querySelectorAll(`#${node.id} .out_socket`) : document.querySelectorAll(`#${node.id} .output button`);
+    if (sources !== null) {
+      sources.forEach( s => {
+        if (s.dataset.edge !== undefined) {
+          JSON.parse(s.dataset.edge).forEach( (e) => {
+            let line = document.getElementById( `e_${e}`);
+            let start = this.getCoords(s);
+            line.setAttribute('x1',start.x);
+            line.setAttribute('y1',start.y);
+          });
+        }
+      });
+    }
+    let targets = (shrinkMode) ? document.querySelectorAll(`#${node.id} .in_socket`) : document.querySelectorAll(`#${node.id} .input button`);
+    if (targets !== null) {
+      if (shrinkMode) {
+        targets.forEach( t => {
+          if (t.dataset.edge !== undefined) {
+            JSON.parse(t.dataset.edge).forEach( (e) => {
+              let line = document.getElementById(`e_${e}`);
+              let end = this.getCoords(t);
+              line.setAttribute('x2',end.x);
+              line.setAttribute('y2',end.y);
             });
           }
         });
       }
-      let targets = (shrinkMode) ? document.querySelectorAll(`#${node.id} .input_connector`) : document.querySelectorAll(`#${node.id} .input button`);
-      if (targets !== null) {
-        if (shrinkMode) {
-          targets.forEach( t => {
-            if (t.dataset.edge !== undefined) {
-              JSON.parse(t.dataset.edge).forEach( (e) => {
-                let line = document.getElementById(`e_${e}`);
-                let end = this.getCoords(t);
-                line.setAttribute('x2',end.x);
-                line.setAttribute('y2',end.y);
-              });
-            }
-          });
-        }
-        else {
-          targets.forEach( t => {
-            let line = document.getElementById(`e_${t.dataset.edge}`);
-            let end = this.getCoords(t);
-            line.setAttribute('x2',end.x);
-            line.setAttribute('y2',end.y);
-          });
-        }
-
+      else {
+        targets.forEach( t => {
+          let line = document.getElementById(`e_${t.dataset.edge}`);
+          let end = this.getCoords(t);
+          line.setAttribute('x2',end.x);
+          line.setAttribute('y2',end.y);
+        });
       }
-    });
+
+    }
   }
 
   /**
@@ -144,9 +148,11 @@ class Graph {
   getCoords(element) {
     let rect = element.getBoundingClientRect();
     // console.log(rect);
+    let cx = document.documentElement.clientWidth/2.0;
+    let cy = document.documentElement.clientHeight/2.0;
     return {
-      x: rect.left + rect.width / 2.0 + window.scrollX,
-      y: rect.top  + rect.height / 2.0 + window.scrollY
+      x: (rect.left + rect.width / 2.0 )  + window.scrollX,
+      y: (rect.top  + rect.height / 2.0 ) + window.scrollY
     }
   }
 } // End of class Graph

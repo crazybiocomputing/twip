@@ -353,11 +353,127 @@
     "description": "Statistics",
     "help": "Basic Statistics",
     "properties": [
+      {"label": "Count", "output": "value"},
       {"label": "Min", "output": "value"},
       {"label": "Max", "output": "value"},
       {"label": "Mean", "output": "value"},
       {"label": "Std.Dev.", "output": "value"},
+      {"label": "Mode", "output": "value"},
+      {"canvas": "histogram"},
       {"label": "All Slices", "checkbox": false},
+      {"label": "Raster", "input": "raster"}
+    ]
+  },
+  {
+    "id": 60,
+    "class": "programming",
+    "description": "Variable",
+    "help": "Numeric node",
+    "properties": [
+      {"layer": "None", "type": "content","properties": []},
+      {"layer": "Number", "type": "content", "properties": [
+        {"label": "Number", "output": "number"},
+        {"label": "Number", "numerical": 0,"var": "number"}
+      ]},
+      {"layer": "String", "type": "content", "properties": [
+        {"label": "Text", "output": "string"},
+        {"label": "String", "text": "hello world!!","var": "string"}
+      ]},
+      {"label": "Op.","layerselect": true, "select": ["None","Number","String"],"var": "typevar"}
+    ]
+  },
+  {
+    "id": 62,
+    "class": "programming",
+    "description": "Array",
+    "help": "Array Node",
+    "properties": [
+      {"label": "Array", "output": "array"},
+      {"label": "0: ", "text": 1},
+      {"label": "1: ", "text": "hello"},
+      {"label": "2: ", "text": 3},
+      {"label": "Add" , "button": "+"}
+    ]
+  },
+  {
+    "id": 63,
+    "class": "programming",
+    "description": "Object",
+    "help": "Object Node",
+    "properties": [
+      {"label": "Object", "output": "object"},
+      {"label": "Property", "value": "0"},
+      {"label": "Add" , "button": "+"}
+    ]
+  },
+  {
+    "id": 64,
+    "class": "programming",
+    "description": "Arithmetic",
+    "help": "Arithmetic operations",
+    "properties": [
+      {"label": "Number", "output": "number"},
+      {"label": "Op.", "select": ["None","Add","Subtract","Multiply","Divide","AND","OR","XOR","Average","Difference"]},
+      {"label": "Number #1", "input": "number"},
+      {"label": "Number #2", "input": "number"}
+    ]
+  },
+  {
+    "id": 65,
+    "class": "programming",
+    "description": "Adv. Arithmetic",
+    "help": "Log and Trigonometric operations",
+    "properties": [
+      {"label": "Number", "output": "number"},
+      {"label": "Op.", "select": ["None","cos","sin","tan","acos","asin","atan","tanh","log","ln"]},
+      {"label": "Number", "input": "number"}
+    ]
+  },
+  {
+    "id": 66,
+    "class": "programming",
+    "description": "Conditional",
+    "help": "if <condition> then <do-something> else <do-something-else>",
+    "properties": [
+      {"label": "Then", "output": "number"},
+      {"label": "Else", "output": "number"},
+      {"label": "If", "text": "v == 3"},
+      {"label": "Number", "input": "number"}
+    ]
+  },
+  {
+    "id": 71,
+    "class": "programming",
+    "description": "Range",
+    "help": "Python function range(..)",
+    "properties": [
+      {"label": "Array", "output": "data"},
+      {"label": "Start", "numerical": 0},
+      {"label": "Stop", "numerical": 10},
+      {"label": "Step", "numerical": 1},
+      {"label": "none", "flowcontrols": 31}
+    ]
+  },
+  {
+    "id": 72,
+    "class": "programming",
+    "description": "Map",
+    "help": "functional programming map(..)",
+    "properties": [
+      {"label": "Data", "output": "data"},
+      {"label": "Code", "output": "code"},
+      {"label": "Array", "input": "array"}
+    ]
+  },
+  {
+    "id": 66,
+    "class": "programming",
+    "description": "Get...",
+    "help": "Get an array of data (slices, pixels, etc.)",
+    "properties": [
+      {"label": "Array", "output": "array"},
+      {"label": "Feature", "select": ["none","Pixels","Columns","Rows","Z-Slices","Y-Slices","X-Slices"]},
+      {"label": "Range", "text": "all"},
       {"label": "Raster", "input": "raster"}
     ]
   },

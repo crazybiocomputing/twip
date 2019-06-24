@@ -71,7 +71,7 @@ class Node {
     nodeH.appendChild(foot);
 
     // Add draggable feature
-    draggable(nodeH);
+    draggable(nodeH,dragStartNode,dragOverNode,dragEndNode);
 
   }
 
@@ -107,9 +107,9 @@ class Node {
 
     let shrink = document.createElement('div');
     shrink.className = 'shrinkdiv'; shrink.classList.add(node.class.replace('.','_').toLowerCase());
-    shrink.innerHTML = (this.hasInputs) ? '<span class="input_connector"><i class="fas fa-chevron-circle-right"></i></span>': '';
+    shrink.innerHTML = (this.hasInputs) ? '<span class="in_socket"><i class="fas fa-chevron-circle-right"></i></span>': '';
     shrink.innerHTML += '<p>&nbsp;</p>';
-    shrink.innerHTML += (this.hasOutputs) ? '<span class="output_connector"><i class="fas fa-chevron-circle-right"></i></span>' : '';
+    shrink.innerHTML += (this.hasOutputs) ? '<span class="out_socket"><i class="fas fa-chevron-circle-right"></i></span>' : '';
     return shrink;
   }
 
@@ -198,7 +198,7 @@ class Node {
       },'');
     }
     else {
-      content.innerHTML += this.createRow( node.properties.filter( (prop) => prop.layer === undefined && prop.layerselect === undefined && prop.input === undefined && prop.output === undefined) );
+      this.createRows( node.properties.filter( (prop) => prop.layer === undefined && prop.layerselect === undefined && prop.input === undefined && prop.output === undefined),content );
     }
 
 
@@ -209,7 +209,7 @@ class Node {
         return html + `<div id="layer_${index}" class="layer"> ${this.createRow(one.properties)} </div>`;
       },'');
     }
-    else {
+    else {id
       inputs.innerHTML = this.createRow( node.properties.filter( (prop) => prop.input !== undefined) );
     }
 
@@ -233,6 +233,16 @@ class Node {
     foot.className = 'footer';
     foot.innerHTML = `<span style="align:right;margin:2px">${node.class}</span>`; // <button class="resize"><i class="fas fa-signal"></i></button>
     return foot;
+  }
+
+  /*
+   * Create one Row
+   *
+   * @author Jean-Christophe Taveau
+   */
+  createRows(props,parent) {
+    let nodeid = this.id;
+    props.forEach( row => parent.appendChild(NodeFactory.createRow(row,nodeid)) );
   }
 
   /*
@@ -276,7 +286,7 @@ class Node {
             break;
           case 'select': 
             let options = prop.select.reduce( (html,item,index) => html + `<option value="${index}">${item}</option>`,'');
-            accu += `<select>${options}</select>`;
+            accu += `<div class="select-container"><select>${options}</select></div>`;
             break;
           case 'text': 
             accu += `<input type="text" class="text" minlength="4" maxlength="8" size="10" value="${prop.text}"></input>`;

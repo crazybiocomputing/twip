@@ -112,6 +112,10 @@
     svg.setAttribute('height','100%');
 
     main.prepend(svg);
+    let boardgame = document.createElement('div');
+    boardgame.id = 'board';
+    boardgame.className = 'board';
+    main.appendChild(boardgame);
 
     // Load Test Graph
     let test = {
@@ -174,6 +178,13 @@
           pos: [0,0],
           metadata: {
           }
+        },
+        {
+          id: 22,
+          template:50,
+          pos: [0,0],
+          metadata: {
+          }
         }
       ],
       edges : [
@@ -206,16 +217,22 @@
           eid: 6,
           source: 2,out: 0,
           target: 21, in: 0,
+        },
+        {
+          eid: 7,
+          source: 2,out: 0,
+          target: 22, in: 0,
         }
       ]
     };
 
     TWIP.graph.setTemplates(nodeTemplates);
-    TWIP.graph.setRootNode(main);
+    TWIP.graph.setRootNode(boardgame);
     TWIP.graph.setGraphicsContext(svg);
     TWIP.graph.build(test);
     TWIP.graph.show();
 
+    TWIP.init();
   }); 
 
 </script>
