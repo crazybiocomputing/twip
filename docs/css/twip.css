@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 
 body,main,#board {
   margin:0;
@@ -8,6 +12,7 @@ body {
   font-family: 'Lato', sans-serif;
   font-size: 12px;
   height: 100vh;
+  overflow: hidden;
 }
 main {
   width: 100vw;
@@ -205,6 +210,7 @@ svg {
 }
 
 
+/*
 .tabs li {
   float: left;
   margin: 0 2px 0 0;
@@ -224,7 +230,6 @@ svg {
 
 .tab button {
   background-color: inherit;
-/*  float: left; */
   border: none;
   outline: none;
   cursor: pointer;
@@ -236,7 +241,7 @@ svg {
   left: 120px;
 }
 
-
+*/
 
 /* Change background color of buttons on hover */
 .tab button:hover {
@@ -256,34 +261,51 @@ svg {
   border-top: none;
 } 
 
-select, input, button {
-  box-sizing: content-box;
-}
+
 
 .body {
-  display: table;
-  min-height: 100px;
+  display: block;
   margin: 4px;
 }
 
 
-.body .output {
-  display: table-row;
+.body .row {
+  display: flex;
+  flex-flow: row wrap;
 }
 
-.body .row {
-  display: table-row;
+.row-1 {
+  display: flex;
+  flex-flow: row wrap;
+  text-align: right;
+}
+
+.row-1 .flex-cell:nth-child(1) {
+  width: 100%;
+}
+
+.row-2 {
+  display: flex;
+  flex-flow: row wrap;
+  text-align: right;
+}
+
+.row-2 .flex-cell:nth-child(1) {
+  width: 40%;
+}
+
+.row-2 .flex-cell:nth-child(2) {
+  width: 60%;
+  text-align: left;
 }
 
 .body .input {
-  display: table-cell;
+  text-align: left;
   /*padding: 0px 2px;*/
 }
 
 .body label {
-  display: table-cell;
-  width: 40%;
-  padding-right: 4px;
+  margin-right: 8px;
   text-align: right;
 }
 
@@ -292,7 +314,7 @@ select, input, button {
   width: 100%;
   border-radius: 10px;
   background-color: #fff;
-  margin: 0 0 1.5em 0;
+  /* margin: 0 0 1.5em 0; */
   
   overflow: hidden; 
 }
@@ -336,7 +358,6 @@ select, input, button {
 }
 
 input, .select-container {
-  display: table-cell;
   font-family: 'Lato', sans-serif;
   font-size:12px;
   background-color: #fefefe;
@@ -374,6 +395,7 @@ input[type="number"] {
 }
 
 
+/*
 .inputs {
   display: flex;
   flex-flow: column wrap;
@@ -383,6 +405,8 @@ input[type="number"] {
 .inputs .input {
   margin: 2px 0px;
 }
+*/
+
 
 .input button  {
   display: block;
@@ -425,7 +449,6 @@ input[type="number"] {
 
 .output {
   text-align: right;
-  display: block;
 }
 
 .output button  {
@@ -457,18 +480,18 @@ input[type="number"] {
   padding: 4px;
 }
 
-.content input[type="file"], .file-input {
+.body input[type="file"], .file-input {
   display: none;
 }
 
-.content .graphics {
+.body .graphics {
 
 }
 
-.content canvas {
+.body canvas {
   background-image: url(background.png);
   max-width: 100%;
-  margin: 0 auto;
+  padding: 4px;
 }
 
 .footer .resize {

@@ -159,7 +159,6 @@ class Node {
     body.id = 'body_'+id;
     body.className = 'body';
     // Main content
-    let content = document.createElement('div'); content.id = 'content_' + id; content.className = 'content';
     let inputs = document.createElement('div'); inputs.id   = 'inputs_' + id; inputs.className = 'inputs';
     let action = document.createElement('div'); action.className = 'action';
     let popup = document.createElement('div'); popup.className = 'popup';
@@ -168,27 +167,29 @@ class Node {
     let outputLayers = [];
     let contentLayers = [];
     let inputLayers = [];
-    let headLayer;
+    let layers;
 
     if (this.hasLayers) {
       // Sort layers according to types: <output>, <content>, <input>
-      headLayer = node.properties.filter( p => p.layerselect !== undefined)[0];
-      let layers = node.properties.filter( p => p.layer !== undefined);
+      let headLayer = node.properties.filter( p => p.layerselect !== undefined)[0];
+      layers = node.properties.filter( p => p.layer !== undefined);
       outputLayers = layers.filter( (lay) => lay.type === 'output');
       contentLayers = layers.filter( (lay) => lay.type === 'content');
       inputLayers = layers.filter( (lay) => lay.type === 'input');
+      // NodeFactory.createLayers(layers,body,this.id);
     }
 
     // Outputs
-    let outputs = this.createOutputs(id,this.hasLayers,headLayer);
+    // let outputs = this.createOutputs(id,this.hasLayers,headLayer);
 
     // Content
     if (this.hasLayers) {
       // Selector
-      let options = headLayer.select.reduce( (html,item,index) => html + `<option value="${index}">${item}</option>`,'');
-      content.innerHTML = `<div class="row"><label>${headLayer.label}</label><select id='layerselect_${id}' onchange = "displayLayer(event)">${options}</select></div>`;
+      // let options = headLayer.select.reduce( (html,item,index) => html + `<option value="${index}">${item}</option>`,'');
+      //content.innerHTML = `<div class="row"><label>${headLayer.label}</label><select id='layerselect_${id}' onchange = "displayLayer(event)">${options}</select></div>`;
     }
-
+    else {
+/*
     if (contentLayers.length > 0) {
       content.innerHTML += headLayer.select.reduce ( (html,desc,index) => {
         console.log('CHOICE '+desc);
@@ -198,8 +199,11 @@ class Node {
       },'');
     }
     else {
-      this.createRows( node.properties.filter( (prop) => prop.layer === undefined && prop.layerselect === undefined && prop.input === undefined && prop.output === undefined),content );
+*/
+
     }
+
+      NodeFactory.createContent( node.properties,body,this.id );
 
 
     // Inputs
@@ -209,15 +213,6 @@ class Node {
         return html + `<div id="layer_${index}" class="layer"> ${this.createRow(one.properties)} </div>`;
       },'');
     }
-    else {id
-      inputs.innerHTML = this.createRow( node.properties.filter( (prop) => prop.input !== undefined) );
-    }
-
-    body.appendChild(outputs);
-    body.appendChild(content);
-    body.appendChild(inputs);
-    body.appendChild(action);
-    body.appendChild(popup);
 
     return body;
   }
