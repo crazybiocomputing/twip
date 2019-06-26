@@ -50,7 +50,7 @@
     console.log(id);
     // Pass #1
     let layers = document.querySelectorAll(`#body_${id} .layer`);
-    layers.forEach( (layer) => layer.style.display = (layer.id === `layer_${evt.target.value}`) ?  "table-row-group" : "none");
+    layers.forEach( (layer) => layer.style.display = (layer.id === `layer_${evt.target.value}`) ?  "block" : "none");
     // Pass #2
     layers = document.querySelectorAll(`#body_${id} .outputs .layer`);
     layers.forEach( (layer) => layer.style.display = (layer.id === `layer_${evt.target.value}`) ?  "block" : "none");
@@ -63,6 +63,7 @@
    * @author Jean-Christophe Taveau
    */
   const dragStartNode = (event) => {
+    event.preventDefault();
     let dragged = document.getElementById(`node_${event.target.dataset.nodeid}`);
     DRAG.node = dragged;
     dragged.style.zIndex = 1000;
@@ -74,6 +75,7 @@
   }
 
   const dragOverNode = (event) => {
+    event.preventDefault();
     let dragged = DRAG.node;
     // Update Node(s)
     console.info('-----------\n   DRAG\n-----------');

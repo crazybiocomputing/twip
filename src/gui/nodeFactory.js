@@ -58,6 +58,7 @@ class NodeFactory {
         container.id = `layer_${index}`;
         NodeFactory.createRows(row.properties,container,nodeid);
         parent.appendChild(container);
+        container.style.display = (index === 0) ? 'block': 'none';
       }
       else {
         let container = NodeFactory.createRow(row,nodeid);
@@ -82,11 +83,11 @@ class NodeFactory {
       let container = NodeFactory.createRow(row,nodeid);
       if (row.output !== undefined) {
         container.id = `o_${outputs++}`;
-        container.classList.add('output');
+        // container.classList.add('output');
       }
       else if (row.input !== undefined) {
         container.id = `i_${inputs++}`;
-        container.classList.add('input');
+        // container.classList.add('input');
       }
       parent.appendChild(container);
     });
@@ -282,8 +283,11 @@ class NodeFactory {
     let container = document.createElement('div');
     container.className = "flex-cell select-container";
     let select = document.createElement('select');
+    select.id = `selectlayer_${id}`;
     let options = row.selectlayer.reduce( (html,item,index) => html + `<option value="${index}">${item}</option>`,'');
     select.innerHTML = options;
+    select.addEventListener("change",displayLayer);
+    
     container.appendChild(select);
     return container;
   }

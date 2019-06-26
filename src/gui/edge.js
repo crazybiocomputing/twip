@@ -48,7 +48,7 @@ class Edge {
     nodeS.dataset.edge = JSON.stringify(tmp);
     if (shrinkNodeS.dataset.edge !== undefined) {
       let array = JSON.parse(shrinkNodeS.dataset.edge);
-      array = [...array,...tmp];
+      array = [...array,...tmp].filter((v,i,indexes) => indexes.indexOf(v) === i);
       console.log(array);
       shrinkNodeS.dataset.edge = JSON.stringify(array);
     }

@@ -7,7 +7,7 @@
     "properties": [
       {"label": "Raster","output": "raster"},
       {"label": "Type","select": ["8-bit","16-bit","32-bit","RGB"],"var": "type"},
-      {"label": "Fill with","text": "rgb(0,0,0)","var": "fill"},
+      {"label": "Fill","text": "rgb(0,0,0)","var": "fill"},
       {"label": "Width","numerical": 256,"var": "width"},
       {"label": "Height","numerical": 256,"var": "height"},
       {"label": "NSlices","numerical": 1,"var": "nslices"}
@@ -32,7 +32,7 @@
     "properties": [
       {"label": "Raster","output": "raster"},
       {
-        "label": "<span style=\"font-size: 2em;vertical-align:middle\"><i class=\"far fa-image\"></i></span>",
+        "label": "Open",
         "select": [
           "AuPbSn 40 (56K)",
           "Blobs (25K)[B]",
@@ -185,7 +185,6 @@
     "class": "converter",
     "description": "Split Colors",
     "properties": [
-      {"layer": "None", "type": "output","properties": []},
       {"layer": "RGBA", "type": "output","properties": [
         {"label": "Red", "output": "raster","var": "red"},
         {"label": "Green", "output": "raster","var": "green"},
@@ -204,7 +203,7 @@
       {"layer": "Alpha", "type": "output", "properties": [
         {"label": "Alpha", "output": "raster","var": "alpha"}
       ]},
-      {"label": "ColorSpace","layerselect": true,"select": ["None","RGBA","HSVA","Luminance","Alpha"],"var": "colorspace"},
+      {"label": "ColorSpace","selectlayer": ["RGBA","HSVA","Luminance","Alpha"],"var": "colorspace"},
       {"label": "Raster", "input": "raster"}
     ]
   },
@@ -338,12 +337,12 @@
     "description": "Information",
     "help": "Basic Statistics",
     "properties": [
-      {"label": "Width", "output": "value","readonly": -1,"var":"width"},
-      {"label": "Height", "output": "value","readonly": -1,"var":"height"},
-      {"label": "NSlices", "output": "value","readonly": -1,"var":"nslices"},
-      {"label": "Bits/Pix", "output": "value","readonly": -1,"var":"bpp"},
-      {"label": "Unit", "output": "value","readonly": "px","var":"unit"},
-      {"label": "Pix.Size", "output": "value","readonly": 1,"var":"pixsize"},
+      {"label": "Width", "readonly": -1,"output": "value","var":"width"},
+      {"label": "Height", "readonly": -1,"output": "value","var":"height"},
+      {"label": "NSlices", "readonly": -1,"output": "value","var":"nslices"},
+      {"label": "Bits/Pix", "readonly": -1,"output": "value","var":"bpp"},
+      {"label": "Unit", "readonly": "px","output": "value","var":"unit"},
+      {"label": "Pix.Size", "readonly": 1,"output": "value","var":"pixsize"},
       {"label": "Raster", "input": "raster"}
     ]
   },

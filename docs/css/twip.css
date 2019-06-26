@@ -31,8 +31,9 @@ main {
 
 section {
   position:absolute;
-  max-width: 200px;
-  background-color: #D3D3D3D0;
+  width: fit-content;
+  /* max-width: 200px; */
+  background-color: black;
   border: 1px solid black;
   border-radius: 4px 4px 4px 4px;
   box-shadow: 4px 4px 2px 1px rgba(10, 10, 10, .4);
@@ -265,7 +266,8 @@ svg {
 
 .body {
   display: block;
-  margin: 4px;
+  padding: 4px;
+  background-color: #D3D3D3D0;
 }
 
 
@@ -422,18 +424,21 @@ input[type="number"] {
   left: -6px;
 }
 
-.input button::after { 
+.input button:hover { 
+/*
     content: '';
     display: block;
-    position: absolute;
-    top: -8px;
+    position: relative;
+    top: -22px;
     bottom: 0;
-    left: -8px;
+    left: -16px;
     right: 0;
     width: 100%;
     height: 100%;
-    border-radius: 50%;
-    border: 8px solid #fff9;
+*/
+  bottom: 8px;
+  left: -14px;
+  border: solid 8px  #fff9;
 }
 
 .input label {
@@ -507,6 +512,21 @@ input[type="number"] {
   font-size: 10px;
   text-align: bottom;
   cursor: pointer; /* Mouse pointer on hover */
+}
+
+.footer a {
+  position: absolute;
+  text-decoration: none;
+  right:0px;
+}
+
+.footer a svg {
+  width: 14px;
+  height: 14px:
+}
+
+.footer a:hover {
+  cursor:se-resize;
 }
 
 /* Darker background on mouse-over */

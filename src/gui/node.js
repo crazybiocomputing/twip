@@ -70,9 +70,6 @@ class Node {
     nodeH.appendChild(body);
     nodeH.appendChild(foot);
 
-    // Add draggable feature
-    draggable(nodeH,dragStartNode,dragOverNode,dragEndNode);
-
   }
 
   /*
@@ -95,6 +92,9 @@ class Node {
         </a>
         &nbsp;&nbsp;#${node.id} - ${desc} &nbsp;${preview}
       </p>`;
+
+    // Add draggable feature
+    draggable(head,dragStartNode,dragOverNode,dragEndNode);
     return head;
   }
 
@@ -113,39 +113,6 @@ class Node {
     return shrink;
   }
 
-  // Sub-content Outputs of <div> `content`
-  createOutputs(id,headLayer,isLayered) {
-    let node = this.template;
-
-    let layers;
-    if (isLayered) {
-      layers = node.properties.filter( p => p.layer !== undefined);
-    }
-    let outputLayers = (isLayered) ? layers.filter( (lay) => lay.type === 'output') : [];
-
-    let outputs = document.createElement('div'); 
-    outputs.id = 'outputs_' + id; 
-    outputs.className = 'outputs';
-
-    if (outputLayers.length > 0) {
-      outputs.innerHTML = headLayer.select.reduce ( (html,desc,index) => {
-        console.log('CHOICE ', index,desc);
-        let one = outputLayers.filter( layer => layer.layer === desc)[0];
-        return html + `<div id="layer_${index}" class="layer"> ${this.createRow(one.properties)} </div>`;
-      },'');
-    }
-    else {
-      outputs.innerHTML = this.createRow( node.properties.filter( (prop) => prop.output !== undefined) );
-    }
-
-    return outputs;
-  }
-
-  createContent() {
-  }
-
-  createInputs() {
-  }
 
   /*
    * Create Body
@@ -159,60 +126,8 @@ class Node {
     body.id = 'body_'+id;
     body.className = 'body';
     // Main content
-    let inputs = document.createElement('div'); inputs.id   = 'inputs_' + id; inputs.className = 'inputs';
-    let action = document.createElement('div'); action.className = 'action';
-    let popup = document.createElement('div'); popup.className = 'popup';
 
-    // Parameters
-    let outputLayers = [];
-    let contentLayers = [];
-    let inputLayers = [];
-    let layers;
-
-    if (this.hasLayers) {
-      // Sort layers according to types: <output>, <content>, <input>
-      let headLayer = node.properties.filter( p => p.layerselect !== undefined)[0];
-      layers = node.properties.filter( p => p.layer !== undefined);
-      outputLayers = layers.filter( (lay) => lay.type === 'output');
-      contentLayers = layers.filter( (lay) => lay.type === 'content');
-      inputLayers = layers.filter( (lay) => lay.type === 'input');
-      // NodeFactory.createLayers(layers,body,this.id);
-    }
-
-    // Outputs
-    // let outputs = this.createOutputs(id,this.hasLayers,headLayer);
-
-    // Content
-    if (this.hasLayers) {
-      // Selector
-      // let options = headLayer.select.reduce( (html,item,index) => html + `<option value="${index}">${item}</option>`,'');
-      //content.innerHTML = `<div class="row"><label>${headLayer.label}</label><select id='layerselect_${id}' onchange = "displayLayer(event)">${options}</select></div>`;
-    }
-    else {
-/*
-    if (contentLayers.length > 0) {
-      content.innerHTML += headLayer.select.reduce ( (html,desc,index) => {
-        console.log('CHOICE '+desc);
-        let one = contentLayers.filter( lay => lay.layer === desc)[0];
-        console.log(one);
-        return html + `<div id="layer_${index}" class="layer"> ${this.createRow(one.properties)} </div>`;
-      },'');
-    }
-    else {
-*/
-
-    }
-
-      NodeFactory.createContent( node.properties,body,this.id );
-
-
-    // Inputs
-    if (inputLayers.length > 0) {
-      inputs.innerHTML = headLayer.select.reduce ( (html,desc,index) => {
-        let one = inputLayers.filter( layer => layer.layer === desc)[0];
-        return html + `<div id="layer_${index}" class="layer"> ${this.createRow(one.properties)} </div>`;
-      },'');
-    }
+    NodeFactory.createContent( node.properties,body,this.id );
 
     return body;
   }
@@ -224,117 +139,51 @@ class Node {
    * @author Jean-Christophe Taveau
    */
   createFooter(node,id,metadata) {
+  
+    const resizeStart = (event) => {
+      event.preventDefault();
+      console.log('EVENT',event.target.dataset.nodeid);
+      let dragged = document.getElementById(`node_${event.target.dataset.nodeid}`);
+      DRAG.node = dragged;
+      return dragged;
+    }
+
+    const resizeMove = (event) => {
+      event.preventDefault();
+      let dragged = DRAG.node;
+
+      // Apply the inverse of transform matrix of `board`
+      DRAG.node.style.width = ((DRAG.BBox.x - TWIP.tx)/TWIP.zoom + DRAG.newDX/TWIP.zoom)  + 'px';
+      DRAG.node.style.height  = ((DRAG.BBox.y - TWIP.ty)/TWIP.zoom + DRAG.newDY/TWIP.zoom)  + 'px';
+    };
+
+    const resizeEnd = (event) => {
+      // Do nothing?
+      event.preventDefault();
+    };
+
+
     let foot = document.createElement('div');
     foot.className = 'footer';
-    foot.innerHTML = `<span style="align:right;margin:2px">${node.class}</span>`; // <button class="resize"><i class="fas fa-signal"></i></button>
+    foot.innerHTML = `<span style="align:right;margin:2px">${node.class}</span>`;
+    let link = document.createElement('a');
+    foot.appendChild(link);
+    link.dataset.nodeid = id;
+    link.innerHTML = `
+      <svg preserveAspectRatio="xMinYMin" viewBox="0 0 20 20">
+        <circle cx="18" cy="6" r="2" stroke="none" fill="gray"/>
+        <circle cx="12" cy="12" r="2" stroke="none" fill="gray"/>
+        <circle cx="18" cy="12" r="2" stroke="none" fill="gray"/>
+        <circle cx="6"  cy="18" r="2" stroke="none" fill="gray"/>
+        <circle cx="12" cy="18" r="2" stroke="none" fill="gray"/>
+        <circle cx="18" cy="18" r="2" stroke="none" fill="gray"/>
+      </svg>`; 
+
+    draggable( link,resizeStart,resizeMove, resizeEnd);
     return foot;
   }
 
-  /*
-   * Create one Row
-   *
-   * @author Jean-Christophe Taveau
-   */
-  createRows(props,parent) {
-    let nodeid = this.id;
-    props.forEach( row => parent.appendChild(NodeFactory.createRow(row,nodeid)) );
-  }
 
-  /*
-   * Create one Row
-   *
-   * @author Jean-Christophe Taveau
-   */
-  createRow(props) {
-      return props.reduce( (accu,prop,index) => {
-        let label = prop.label;
-
-        if (label === '_nodisplay_') {
-          return accu;
-        }
-        accu += (prop.output) ? `<div id="o_${index}" class="output">` : ((prop.input) ? `<div id="i_${index}" class="input">`:`<div class="row">`);
-        if (prop.input !== undefined || prop.output !== undefined) {
-          accu += `<button><i class="fas fa-chevron-circle-right"></i></button>`;
-        }
-
-        if (prop.label !== undefined && prop.output === undefined) {
-          accu += `<label>${prop.label}</label>`;
-        }
-        console.log(Object.keys(prop));
-
-        Object.keys(prop).forEach( key => {
-          switch (key) {
-          case 'canvas': 
-            accu += `<div class="graphics"><canvas></canvas></div>`; 
-            break;
-          case 'checkbox': 
-            accu += `<input class="checkbox" type="checkbox" value="${prop.checkbox}" ${prop.checkbox ? 'checked': ''}></input>`;
-            break;
-          case 'file': 
-            accu += `<i class=\"far fa-folder-open\"></i></label><input id="file" class="file-input" type="file"></input>`;
-            break;
-          case 'numerical': 
-            accu += `<input type="number" class="numerical" name="${prop.var || 'unknown'}" minlength="4" maxlength="8" size="10" value="${prop.numerical}"></input>`;
-            break;
-          case 'readonly': 
-            accu += `<input type="text" readonly minlength="4" maxlength="8" size="10" value="${prop.readonly}"></input>`;
-            break;
-          case 'select': 
-            let options = prop.select.reduce( (html,item,index) => html + `<option value="${index}">${item}</option>`,'');
-            accu += `<div class="select-container"><select>${options}</select></div>`;
-            break;
-          case 'text': 
-            accu += `<input type="text" class="text" minlength="4" maxlength="8" size="10" value="${prop.text}"></input>`;
-            break;
-          }
-        });
-
-        if (prop.label !== undefined && prop.output !== undefined) {
-          accu += `<label>${prop.label}</label>`;
-        }
-        accu += '</div>';
-
-        return accu;
-      },
-        ''
-      );
-/*
-    return props.reduce( (accu,prop,index) => {
-      let label = prop.label;
-
-      if (label === '_nodisplay_') {
-        return accu;
-      }
-      accu += (prop.output) ? `<div id="o_${index}" class="output">` : ((prop.input) ? `<div id="i_${index}" class="input">`:`<div class="row">`);
-      if (prop.output !== undefined || prop.input !== undefined) {
-        accu += `<button><i class="fas fa-chevron-circle-right"></i></button><label>${prop.label}</label>`;
-      }
-
-      if (prop.select !== undefined) {
-        let options = prop.select.reduce( (html,item,index) => html + `<option value="${index}">${item}</option>`,'');
-        accu += `<label>${prop.label}</label><select>${options}</select>`;
-      }
-      else if (prop.checkbox !== undefined) {
-         accu += `<label>${prop.label}</label><input class="checkbox" type="checkbox" value="${prop.checkbox}" ${prop.checkbox ? 'checked': ''}></input>`;
-      }
-      else if (prop.file !== undefined) {
-         accu += `<label for="file" class="file-label"><i class=\"far fa-folder-open\"></i></label><input id="file" class="file-input" type="file"></input>`;
-      }
-      else if (prop.numerical !== undefined){
-        // Label
-         accu += `<label>${prop.label}</label><input type="text" class="numerical" minlength="4" maxlength="8" size="10" value="${prop.numerical}"></input>`;
-      }
-      else if (prop.text !== undefined){
-        // Label
-         accu += `<label>${prop.label}</label><input type="text" class="text" minlength="4" maxlength="8" size="10" value="${prop.text}"></input>`;
-      }
-      accu += '</div>';
-      return accu;
-    },
-      ''
-    );
-*/
-  }
 
 } // End of class Node
 
