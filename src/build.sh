@@ -1,6 +1,7 @@
 #!/bin/bash
 
 cat ./gui/node.js \
+./gui/nodeFactory.js \
 ./gui/edge.js  \
 ./gui/graph.js  \
 ./gui/events.js \

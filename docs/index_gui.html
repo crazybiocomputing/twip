@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf8">
-<title>TWIP GUI</title>
+<title>TWIP - Templates'</title>
 <link href="https://fonts.googleapis.com/css?family=Lato:700" rel="stylesheet"> 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
 <link rel="stylesheet" href="./css/twip_menu.css">
@@ -518,98 +518,6 @@ function move(e) {
 
     main.prepend(svg);
 
-    // Load Test Graph
-    let test = {
-      nodes: [
-        {
-          id: 0,
-          nodeid:1,
-          pos: [0,0],
-          metadata: {
-            type: 3,
-            fill: "rgb(0,0,0)",
-            width: 256,
-            height: 256,
-            nslices: 1
-          }
-        },
-        {
-          id: 2,
-          nodeid:3,
-          pos: [0,0],
-          metadata: {
-            sample: 5
-          }
-        },
-        {
-          id: 5,
-          nodeid:11,
-          pos: [0,0],
-          metadata: {
-            backdrop: true
-          }
-        },
-        {
-          id: 14,
-          nodeid:25,
-          pos: [0,0],
-          metadata: {
-            mode: 12
-          }
-        },
-        {
-          id: 17,
-          nodeid:33,
-          pos: [0,0],
-          metadata: {
-            op: 10
-          }
-        },
-        {
-          id: 20,
-          nodeid:42,
-          pos: [0,0],
-          metadata: {
-            op: 2
-          }
-        }
-      ],
-      edges : [
-        {
-          eid: 1,
-          source: 2,out: 0,
-          target: 17, in: 0,
-        },
-        {
-          eid: 2,
-          source: 0,out: 0,
-          target: 17, in: 1,
-        },
-        {
-          eid: 3,
-          source: 17,out: 0,
-          target: 14, in: 0,
-        },
-        {
-          eid: 4,
-          source: 20,out: 0,
-          target: 5, in: 0,
-        },
-        {
-          eid: 5,
-          source: 14,out: 0,
-          target: 20, in: 0,
-        },
-        {
-          eid: 6,
-          source: 2,out: 0,
-          target: 21, in: 0,
-        }
-      ]
-    };
-
-
-    createEdges(svg,test.edges);
   }); 
 
 </script>

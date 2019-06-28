@@ -58,7 +58,48 @@
   }
 
   /*
-   * Functions used for drag and drop of `node`
+   * Functions used for click and drag and drop of `edge`
+   *
+   * @author Jean-Christophe Taveau
+   */
+  const edgeStart = (event) => {
+    console.log('EDGE start',event.target);
+    event.preventDefault();
+    // Get canvas
+    let ctx = document.querySelector('main svg');
+    let line = document.createElementNS(xmlns,'line');
+    line.dataset.source = event.target.id;
+    line.dataset.target = event.target.id;
+    line.setAttribute('id',`rubberband`);
+    line.setAttribute('stroke-width',2.0);
+    line.setAttribute('x1',event.x);
+    line.setAttribute('y1',event.y);
+    line.setAttribute('x2',event.x);
+    line.setAttribute('y2',event.y);
+    line.setAttribute("stroke", "#dfdfdf");
+    ctx.append(line);
+    return event.target;
+  }
+
+  const edgeDrag = (event) => {
+    console.log('EDGE drag');
+    let line = document.getElementById('rubberband');
+    line.setAttribute('x2',event.x);
+    line.setAttribute('y2',event.y);
+    event.preventDefault();
+  }
+
+  const edgeEnd = (event) => {
+    // Check if target is a complementary node (output/input) to source (input/output) node
+    // Add an edge to the graph
+    // Otherwise delete line
+    document.getElementById('rubberband').remove();
+    console.log('EDGE end',event.target);
+    event.preventDefault();
+  }
+
+  /*
+   * Functions used for click and drag of `node`
    *
    * @author Jean-Christophe Taveau
    */

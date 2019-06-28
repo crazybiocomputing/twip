@@ -232,7 +232,11 @@ class NodeFactory {
     input.setAttribute('maxlength',8);
     input.setAttribute('size',10);
     input.setAttribute('value',row.numerical);
-
+    input.addEventListener('input',(event)=> {
+      let value = event.srcElement.value;
+      event.srcElement.value = /^\d*\.?\d*$/.test(event.srcElement.value) ? value : value.slice(0,-1);
+      return false;
+    });
     container.appendChild(input);
     // TODO Add event onchanged
     return container;
@@ -334,10 +338,14 @@ class NodeFactory {
    * 
    * @author Jean-Christophe Taveau
    */
-  static input_socket() {
+  static input_socket(row,id) {
     let container = document.createElement('div');
     container.className = 'input';
-    container.innerHTML = '<button><i class="fas fa-chevron-circle-right"></i></button>';
+    let button = document.createElement('button');
+    button.id = `insock_${id}[0]`;
+    button.innerHTML = '<i class="fas fa-chevron-circle-right"></i>';
+    draggable(button,edgeStart,edgeDrag,edgeEnd);
+    container.appendChild(button);
     return container;
   }
 

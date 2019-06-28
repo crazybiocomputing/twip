@@ -144,6 +144,7 @@ class Node {
       event.preventDefault();
       console.log('EVENT',event.target.dataset.nodeid);
       let dragged = document.getElementById(`node_${event.target.dataset.nodeid}`);
+      DRAG.width = dragged.getBoundingClientRect().width;
       DRAG.node = dragged;
       return dragged;
     }
@@ -153,7 +154,7 @@ class Node {
       let dragged = DRAG.node;
 
       // Apply the inverse of transform matrix of `board`
-      DRAG.node.style.width = ((DRAG.BBox.x - TWIP.tx)/TWIP.zoom + DRAG.newDX/TWIP.zoom)  + 'px';
+      DRAG.node.style.width = DRAG.width + ((DRAG.BBox.x - TWIP.tx)/TWIP.zoom + DRAG.newDX/TWIP.zoom)  + 'px';
       DRAG.node.style.height  = ((DRAG.BBox.y - TWIP.ty)/TWIP.zoom + DRAG.newDY/TWIP.zoom)  + 'px';
     };
 
@@ -171,12 +172,12 @@ class Node {
     link.dataset.nodeid = id;
     link.innerHTML = `
       <svg preserveAspectRatio="xMinYMin" viewBox="0 0 20 20">
-        <circle cx="18" cy="6" r="2" stroke="none" fill="gray"/>
-        <circle cx="12" cy="12" r="2" stroke="none" fill="gray"/>
-        <circle cx="18" cy="12" r="2" stroke="none" fill="gray"/>
-        <circle cx="6"  cy="18" r="2" stroke="none" fill="gray"/>
-        <circle cx="12" cy="18" r="2" stroke="none" fill="gray"/>
-        <circle cx="18" cy="18" r="2" stroke="none" fill="gray"/>
+        <circle cx="18" cy="6" r="2" stroke="none" fill="#777"/>
+        <circle cx="12" cy="12" r="2" stroke="none" fill="#777"/>
+        <circle cx="18" cy="12" r="2" stroke="none" fill="#777"/>
+        <circle cx="6"  cy="18" r="2" stroke="none" fill="#777"/>
+        <circle cx="12" cy="18" r="2" stroke="none" fill="#777"/>
+        <circle cx="18" cy="18" r="2" stroke="none" fill="#777"/>
       </svg>`; 
 
     draggable( link,resizeStart,resizeMove, resizeEnd);
