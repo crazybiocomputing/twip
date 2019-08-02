@@ -49,8 +49,8 @@ class Node {
     console.log('CREATE ' + node.description);
     let nodeH = this.element;
     nodeH.id = 'node_'+id;
-    nodeH.style.left = `${Math.floor(Math.random() * 1000)}px`;
-    nodeH.style.top = `${Math.floor(Math.random() * 600)}px`;
+    nodeH.style.left = (metadata.x) ? `${metadata.x}px`: `${Math.floor(Math.random() * 1000)}px`;
+    nodeH.style.top  = (metadata.y) ? `${metadata.y}px`: `${Math.floor(Math.random() * 600)}px`;
 
     // Head
     let head = this.createHeader(node,id,metadata);
@@ -93,8 +93,7 @@ class Node {
         &nbsp;&nbsp;#${node.id} - ${desc} &nbsp;${preview}
       </p>`;
 
-    // Add draggable feature
-    draggable(head,dragStartNode,dragOverNode,dragEndNode);
+
     return head;
   }
 

@@ -58,12 +58,13 @@
   }
 
   /*
-   * Functions used for click and drag and drop of `edge`
+   * Functions used for click and drag of `edge`
    *
    * @author Jean-Christophe Taveau
    */
   const edgeStart = (event) => {
     console.log('EDGE start',event.target);
+    DRAG.edge = getID(event.target.id);
     event.preventDefault();
     // Get canvas
     let ctx = document.querySelector('main svg');
@@ -91,7 +92,10 @@
 
   const edgeEnd = (event) => {
     // Check if target is a complementary node (output/input) to source (input/output) node
+    console.log(event.target);
     // Add an edge to the graph
+    console.log(DRAG.edge,getID(event.target.id) );
+    TWIP.graph.appendEdge(DRAG.edge,getID(event.target.id) );
     // Otherwise delete line
     document.getElementById('rubberband').remove();
     console.log('EDGE end',event.target);
@@ -119,12 +123,15 @@
     event.preventDefault();
     let dragged = DRAG.node;
     // Update Node(s)
+    /************
     console.info('-----------\n   DRAG\n-----------');
-    console.info('TRANSF. ',window.getComputedStyle(document.getElementById('board'),null).transform);
+    console.info('TRANSF. ',getMatrix(document.getElementById('board') ) );
     console.info(dragged.getBoundingClientRect().x,dragged.getBoundingClientRect().y);
 
     console.info(DRAG);
     console.info(TWIP);
+    *************/
+
 
     // Apply the inverse of transform matrix of `board`
     DRAG.node.style.left = ((DRAG.BBox.x - TWIP.tx)/TWIP.zoom + DRAG.newDX/TWIP.zoom)  + 'px';
@@ -143,6 +150,7 @@
   }
 
   const DRAG = {
+    BBox:null,
     orgX: 0,
     orgY: 0,
     dx: 0,
@@ -151,6 +159,34 @@
     newDY: 0
   }
   
+  /**
+   * Get Transformed coordinates
+   */
+  const getMatrix = (element) => {
+    const parseMatrix = (transform) => transform.split(/\(|,|\)/).slice(1,-1).map( v => parseFloat(v) );
+
+    let transform = window.getComputedStyle(element,null).transform;
+    console.log(transform);
+    return (transform === 'none') ?  parseMatrix('matrix(1.0, 0.0, 0.0, 1.0, 0.0, 0.0)') : parseMatrix(transform);
+  }
+
+  const getBoardTranslations = () => {
+    let matrix = getMatrix(document.getElementById('board') );
+    return [matrix[4],matrix[5]];
+  }
+
+  const getClickedCoords = (event) => [event.pageX,event.pageY];
+
+  const getViewportCenter = () => {
+    let cx = document.documentElement.clientWidth/2.0;
+    let cy = document.documentElement.clientHeight/2.0;
+    return [cx,cy];
+  }
+
+
+  const getBoundingBox = (element) => element.getBoundingClientRect(); 
+
+
   /**
    * Generic version of draggable
    */
@@ -181,20 +217,12 @@
         funcEnd(event);
       }
       
-      /*
-       * Parse matrix of css transform
-      */
-      const parseMatrix = (transform) => transform.split(/\(|,|\)/).slice(1,-1).map( v => parseFloat(v) );
-
 
       // M A I N of `dragstart`
       console.log(event);
       // Init
       DRAG.button = event.which;
-      let matrix = parseMatrix(window.getComputedStyle(document.getElementById('board'),null).transform);
-      console.info(matrix);
-      TWIP.tx = matrix[4];
-      TWIP.ty = matrix[5];
+      [TWIP.tx,TWIP.ty] = getBoardTranslations();
 
       // Step #1
       let dragged = funcStart(event);
@@ -202,39 +230,10 @@
       if (dragged === false) {
         return;
       }
-      /*
-      let dragged = document.getElementById(`node_${event.target.dataset.nodeid}`);
-      dragged.style.zIndex = 1000;
-      let isShrinked = dragged.classList.contains('shrink');
-      console.log(event.target.dataset.nodeid,dragged);
-      */
-      DRAG.orgX = event.pageX; // * TWIP.zoom + TWIP.tx;
-      DRAG.orgY = event.pageY; // * TWIP.zoom + TWIP.ty;
-      // TODO Must be improved - All the parents up to `game`
 
-      DRAG.cx = document.documentElement.clientWidth/2.0;
-      DRAG.cy = document.documentElement.clientHeight/2.0;
-      let tx = matrix[4];
-      let ty = matrix[5];
-
-      console.info(tx,ty);
-      DRAG.BBox = dragged.getBoundingClientRect(); // - cx )/TWIP.zoom + cx; // Take into account the zoom?
-      DRAG.offsetX = dragged.getBoundingClientRect().left; // - cx )/TWIP.zoom + cx; // Take into account the zoom?
-      DRAG.offsetY = dragged.getBoundingClientRect().top; //  - cy )/TWIP.zoom + cy;// Take into account the zoom?
-
-      console.log('OFFSETS2 ',event.offsetX,event.offsetY,dragged.style.top,dragged.style.left);
-      console.log('COORDS2 ',
-        event.clientX,event.clientY,
-        DRAG.orgX,DRAG.orgY,
-        DRAG.offsetX,DRAG.offsetY,
-        dragged.style.left,dragged.style.top,
-        dragged.getBoundingClientRect().left,dragged.getBoundingClientRect().top
-      );
-      console.info('NODE2 ',window.getComputedStyle(dragged,null).transform);
-
-      console.log('CENTER2 ',document.documentElement.clientWidth/2.0, document.documentElement.clientHeight/2.0);
-
-      // moveAt(event.pageX, event.pageY);
+      [DRAG.orgX,DRAG.orgY] = getClickedCoords(event); 
+      [DRAG.cx,DRAG.cy] = getViewportCenter();
+      DRAG.BBox = getBoundingBox(dragged);
 
       // Move the tile on mousemove
       window.addEventListener('mousemove', drag_over);

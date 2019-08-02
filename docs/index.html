@@ -13,7 +13,7 @@
 
 </head>
 <body>
-<nav>
+<nav class="navhover:hover">
   <div>
     <a class="logo" href="#"></a> 
   </div> 
@@ -57,12 +57,48 @@
   }
 
   const createItem = (item) => {
+    // Callback when mouse over
+    const node_over = (evt) => {
+      console.log(`MOOOOOVE [${evt.clientX},${evt.clientY}]` );
+      DRAG.newDX = (evt.pageX  - DRAG.orgX); ///TWIP.zoom; // WRONG
+      DRAG.newDY = (evt.pageY  - DRAG.orgY); ///TWIP.zoom;
+      dragOverNode(evt);
+      event.preventDefault();
+    }
+
+    // Callback when click
+    const node_drop = (evt) => {
+      console.log(`CLIIICK [${evt.clientX},${evt.clientY}]` );
+      // Remove Events
+      window.removeEventListener('mousemove', node_over,false);
+      window.removeEventListener('mousedown', node_drop,false);
+      // Add draggable feature
+      let head = DRAG.node.querySelector('.header');
+      draggable(head,dragStartNode,dragOverNode,dragEndNode);
+      event.preventDefault();
+    }
+
+    // Main
     let _item = document.createElement('li');
     _item.className = 'item';
     let _link = document.createElement('a');
-    _link.addEventListener('click',createNewNode(item.onclick));
     _link.innerHTML = `${(item.icon) ? item.icon : ''}<span class="nav-text">${item.label}</span>`;
     _item.appendChild(_link);
+    // Add Events
+    _link.addEventListener('mousedown',createNewNode(item.onclick));
+    _link.addEventListener('mouseup',(evt) => {
+      console.log('New Node FLYING');
+      // Init
+      [TWIP.tx,TWIP.ty] = getBoardTranslations();
+      [DRAG.cx,DRAG.cy] = getViewportCenter();
+      DRAG.BBox = getBoundingBox(DRAG.node);
+
+      window.addEventListener('mousemove', node_over);
+      window.addEventListener('mousedown', node_drop);
+      event.preventDefault();
+    });
+
+
     return _item;
   }
 
@@ -74,9 +110,14 @@
   }
 
   const createNewNode = (nodetype) => (evt) => {
+    // Init
+    [DRAG.orgX,DRAG.orgY] = getClickedCoords(event); 
     console.log('New node ' + nodetype);
-    TWIP.graph.appendNodeByName(nodetype,-1,{x:evt.pageX,y:evt.pageY});
+    let node = TWIP.graph.appendNodeByName(nodetype,-1,{x:DRAG.orgX - 50,y:DRAG.orgY - 10});
+    DRAG.node = node.element;
   }
+
+
   ////// MAIN //////
 
   let main = document.querySelector('main');
@@ -128,9 +169,6 @@
     TWIP.graph.setRootNode(boardgame);
     TWIP.graph.setGraphicsContext(svg);
 
-    for (let n =0; n < nodeTemplates.length; n++) {
-      TWIP.graph.appendNode(nodeTemplates[n].id);
-    }
   }); 
 
 </script>

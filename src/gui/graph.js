@@ -43,12 +43,46 @@ class Graph {
     this.createEdges(json.edges);
   }
 
-  appendNode(templateID) {
-    let newid = 0; // TODO HACK
-    let node =  new Node(node.id,this.templates.find( n => n.id === templateID));
-    this.nodes.push(node);
+  lastID() {
+    return (this.nodes.length > 0) ? this.nodes[this.nodes.length - 1].id : 0;
   }
 
+  appendNode(templateID,nodeID = -1,metadata={}) {
+    let newid = (nodeID !== -1) ? nodeID : this.lastID() + 1; // TODO HACK
+    let node =  new Node(newid,this.templates.find( n => n.id === templateID),metadata);
+    this.nodes.push(node);
+    this.root.appendChild(node.element);
+    return node;
+  }
+
+  /**
+   * Append node in the current Graph by its name
+   *
+   * @author Jean-Christophe Taveau
+   */
+  appendNodeByName(templateName,nodeID = -1,metadata={}) {
+
+    let newid = (nodeID !== -1) ? nodeID : this.lastID() + 1; // TODO HACK
+    let node =  new Node(newid,this.templates.find( n => n.name === templateName),metadata);
+    this.nodes.push(node);
+    this.root.appendChild(node.element);
+    return node;
+  }
+
+
+  appendEdge(start_id,end_id) {
+    let ctx = this.context;
+    let eid = this.edges[this.edges.length - 1].eid++;
+    let e = new Edge(eid,start_id,end_id,0,0);
+    this.edges.push(e);
+    ctx.append(e.line);
+  }
+
+  /**
+   * Create Nodes of the given graph from templates
+   *
+   * @author Jean-Christophe Taveau
+   */
   createNodes(nodes) {
     let root = this.root;
     // Create Graph
@@ -62,6 +96,11 @@ class Graph {
     });
   }
 
+  /**
+   * Create Edges of the given graph
+   *
+   * @author Jean-Christophe Taveau
+   */
   createEdges(edges) {
     let ctx = this.context;
     edges.forEach( (edge) => {
@@ -92,6 +131,13 @@ class Graph {
   show() {
   }
 
+  /**
+   * Update edges of All the nodes defined in an array
+   *
+   * @param {array} nodes - Array of nodes whose edges must be updated
+   *
+   * @author Jean-Christophe Taveau
+   */
   updateAllEdges(nodes) {
     console.log(nodes);
     nodes.forEach( n => {
@@ -99,6 +145,14 @@ class Graph {
     });
   }
 
+  /**
+   * Update edges of a node
+   *
+   * @param {node} node - Node whose edges must be updated
+   * @param {boolean} shrinkMode - State of the node appearance (shrinked or expanded)
+   *
+   * @author Jean-Christophe Taveau
+   */
   updateEdges(node,shrinkMode = false) {
     console.log('UPDATE ' + shrinkMode);
     // Get Edge ID
@@ -132,10 +186,12 @@ class Graph {
       }
       else {
         targets.forEach( t => {
-          let line = document.getElementById(`e_${t.dataset.edge}`);
-          let end = this.getCoords(t);
-          line.setAttribute('x2',end.x);
-          line.setAttribute('y2',end.y);
+          if (t.dataset.edge !== undefined) {
+            let line = document.getElementById(`e_${t.dataset.edge}`);
+            let end = this.getCoords(t);
+            line.setAttribute('x2',end.x);
+            line.setAttribute('y2',end.y);
+          }
         });
       }
 

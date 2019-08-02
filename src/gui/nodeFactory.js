@@ -100,8 +100,8 @@ class NodeFactory {
    */
   static createRow(row,node_id) {
     // Extract widget type
-    let cells = Object.keys(row).filter( prop => ['var','source','zip'].indexOf(prop) === -1);
-    let numcolumns = cells.filter( type => ['input','output','source','var','zip'].indexOf(type) === -1).length;
+    let cells = Object.keys(row).filter( prop => ['name','source','zip'].indexOf(prop) === -1);
+    let numcolumns = cells.filter( type => ['input','output','source','name','zip'].indexOf(type) === -1).length;
     let container = document.createElement('div');
     container.className = `row-${numcolumns}`;
 
@@ -121,6 +121,7 @@ class NodeFactory {
       case 'button': element = NodeFactory.button(row,id); break;
       case 'canvas': element = NodeFactory.canvas(row,id); break;
       case 'checkbox': element = NodeFactory.checkbox(row,id); break;
+      case 'file': element = NodeFactory.file(row,id); break;
       case 'flowcontrols': element = NodeFactory.flowcontrols(row,id); break;
       case 'input': element = NodeFactory.input_socket(row,id); break;
       case 'label': element = NodeFactory.label(row,id); break;
@@ -140,6 +141,15 @@ class NodeFactory {
    * @author Jean-Christophe Taveau
    */
   static button(row,id) {
+    let container = document.createElement('div');
+    container.className = 'flex-cell';
+    let e = document.createElement('button');
+    e.innerHTML = row.button;
+    if (row.output === undefined && row.input === undefined) {
+      e.innerHTML += ':&nbsp;';
+    }
+    container.appendChild(e);
+    return container;
   }
 
   /**
@@ -178,39 +188,64 @@ class NodeFactory {
    * 
    * @author Jean-Christophe Taveau
    */
+  static file(row,id) {
+   let container = document.createElement('div');
+    container.className = 'flex-cell';
+
+    let input = document.createElement('input');
+    input.className = "check";
+    input.setAttribute("type", "file");
+    input.setAttribute('name',row.var || 'unknown');
+    input.setAttribute('value',row.checkbox);
+    input.checked = row.checkbox;
+    container.appendChild(input);
+
+    // TODO Add event onchanged
+    return container;
+  }
+
+  /**
+   * 
+   * @author Jean-Christophe Taveau
+   */
   static flowcontrols(row,id) {
     let buttons = row.flowcontrols.toString(2);
+    console.log(buttons);
     let container = document.createElement('div');
-    container.className = 'flowcontrols';
-    buttons.forEach ( (b,index) => {
-      if (b === 1) {
+    container.className = 'flex-cell';
+    let controls = document.createElement('div');
+    controls.className = 'flowcontrols';
+    container.appendChild(controls);
+    [...buttons].forEach ( (b,index) => {
+      if (b === "1") {
         let button = document.createElement('button');
         switch (index) {
           case 0: 
             // Fast Backward (Go to start)
             button.className = 'fastbckwrd';
-            button.innerHTML = '<i class="fas fa-fast-backward"></i>';break;
+            button.innerHTML = '<i class="fas fa-fast-backward fa-sm"></i>';break;
           case 1:
             // Step backward
             button.className = 'stepbckwrd';
-            button.innerHTML = '<i class="fas fa-step-backward"></i>';break;
+            button.innerHTML = '<i class="fas fa-step-backward fa-sm"></i>';break;
           case 2:
             // Play/Pause
             button.className = 'play';
-            button.innerHTML = '<i class="fas fa-play"></i>'; break;
+            button.innerHTML = '<i class="fas fa-play fa-sm"></i>'; break;
+            //button.innerHTML = '<i class="fas fa-pause fa-sm"></i>'; break;
           case 3:
             // Step Forward
             button.className = 'stepfrwrd';
-            button.innerHTML = '<i class="fas fa-step-forward"></i>';break;
+            button.innerHTML = '<i class="fas fa-step-forward fa-sm"></i>';break;
           case 4:
             // Fast Forward (Go to end)
             button.className = 'fastfrwrd';
-            button.innerHTML = '<i class="fas fa-fast-forward"></i>';break;
+            button.innerHTML = '<i class="fas fa-fast-forward fa-sm"></i>';break;
           default:
             alert('Unknown Flow Controls');
         }
+        controls.appendChild(button);
       }
-      container.appendChild(button);
     });
 
     return container;
@@ -335,7 +370,8 @@ class NodeFactory {
   }
 
   /*
-   * 
+   * Create an input socket
+   *
    * @author Jean-Christophe Taveau
    */
   static input_socket(row,id) {
@@ -353,10 +389,16 @@ class NodeFactory {
    * 
    * @author Jean-Christophe Taveau
    */
-  static output_socket() {
+  static output_socket(row,id) {
     let container = document.createElement('div');
     container.className = 'output';
-    container.innerHTML = '<button><i class="fas fa-chevron-circle-right"></i></button>';
+    // container.innerHTML = '<button><i class="fas fa-chevron-circle-right"></i></button>';
+    let button = document.createElement('button');
+    button.id = `outsock_${id}[0]`;
+    button.innerHTML = '<i class="fas fa-chevron-circle-right"></i>';
+    draggable(button,edgeStart,edgeDrag,edgeEnd);
+    container.appendChild(button);
+
     return container;
   }
 

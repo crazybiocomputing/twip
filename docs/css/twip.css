@@ -51,6 +51,10 @@ p {
   margin: 0;
 }
 
+button {
+  padding: 0;
+}
+
 svg {
   width: 100%;
   height: 100%;
@@ -508,9 +512,21 @@ input[type="number"] {
   padding: 4px;
 }
 
+.flowcontrols {
+  width: 160px;
+  float: left;
+  white-space:nowrap;
+}
+
+.flowcontrols button{
+  display: inline-block;
+}
+
+
 .footer .resize {
   float: right;
 }
+
 
  /* Style buttons */
 .footer  .resize {

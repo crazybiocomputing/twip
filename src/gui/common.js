@@ -27,6 +27,13 @@
 
 const xmlns = "http://www.w3.org/2000/svg";
 
+/**
+ * Return Numerical ID used by graph from node ID (in DOM)
+ *
+ * @author Jean-Christophe Taveau
+ */
+const getID = (nodeid) => nodeid.match(/\d+/)[0];
+
 
 // Zoom Event with mouse wheel scroll
 window.addEventListener("wheel", event => {

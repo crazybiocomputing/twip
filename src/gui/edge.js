@@ -32,10 +32,11 @@ class Edge {
     this.out = output_connector;
     this.target = target_id;
     this.in = input_connector;
-    this.line = this.createEdge(edge_id,source_id,target_id,input_connector, output_connector);
+    this.line = this._createEdge(edge_id,source_id,target_id,input_connector, output_connector);
   }
 
-  createEdge(idE,idS,idT,input,output) {
+  // Private
+  _createEdge(idE,idS,idT,input,output) {
     // Source
     let nodeS = document.querySelector(`#node_${idS} #o_${output} button`);
     let shrinkNodeS = document.querySelector(`#node_${idS} .out_socket`);
